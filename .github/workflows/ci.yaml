@@ -1,0 +1,52 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run automated tests
+        run: python -m pytest -v
+
+      - name: Start local report receiver
+        if: always()
+        run: |
+          nohup python receiver.py > receiver.log 2>&1 &
+          sleep 2
+          curl --fail http://127.0.0.1:5001/
+
+      - name: Send test report to receiver
+        if: always()
+        run: python send_report.py
+
+      - name: Show received reports
+        if: always()
+        run: cat reports.json
+
+      - name: Upload report as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: |
+            reports.json
+            receiver.log
