@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Submission Portal</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto 25px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1f6391;
+        }
+
+        .error-box {
+            background-color: #fdecea;
+            border: 1px solid #e74c3c;
+            color: #c0392b;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .error-box ul {
+            margin: 5px 0;
+            padding-left: 20px;
+        }
+
+        .success-box {
+            background-color: #eafaf1;
+            border: 1px solid #27ae60;
+            color: #1e8449;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            word-break: break-word;
+        }
+
+        th {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .empty-msg {
+            color: #7f8c8d;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Assignment Submission Portal</h1>
+
+        {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+        <div class="success-box">{{ message }}</div>
+        {% endfor %}
+        {% endwith %}
+
+        {% if errors %}
+        <div class="error-box">
+            <strong>Please fix the following errors:</strong>
+            <ul>
+                {% for error in errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/">
+            <label for="student_name">Student Name</label>
+            <input type="text" id="student_name" name="student_name" value="{{ form_data.get('student_name', '') }}">
+
+            <label for="reg_number">Registration Number</label>
+            <input type="text" id="reg_number" name="reg_number" value="{{ form_data.get('reg_number', '') }}">
+
+            <label for="assignment_title">Assignment Title</label>
+            <input type="text" id="assignment_title" name="assignment_title"
+                value="{{ form_data.get('assignment_title', '') }}">
+
+            <label for="submission_url">Submission URL</label>
+            <input type="text" id="submission_url" name="submission_url"
+                value="{{ form_data.get('submission_url', '') }}">
+
+            <button type="submit">Submit Assignment</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <h2>Saved Submissions ({{ submissions|length }})</h2>
+
+        {% if submissions %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Student Name</th>
+                        <th>Reg. Number</th>
+                        <th>Assignment Title</th>
+                        <th>Submission URL</th>
+                        <th>Submitted At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in submissions %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ s.student_name }}</td>
+                        <td>{{ s.reg_number }}</td>
+                        <td>{{ s.assignment_title }}</td>
+                        <td>
+                            <a href="{{ s.submission_url }}" target="_blank" rel="noopener noreferrer">{{
+                                s.submission_url }}</a>
+                        </td>
+                        <td>{{ s.submitted_at }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="empty-msg">No submissions yet.</p>
+        {% endif %}
+    </div>
+</body>
+
+</html>

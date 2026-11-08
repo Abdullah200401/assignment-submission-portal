@@ -1,0 +1,19 @@
+# Virtual environment (har banda apna khud banata hai)
+venv/
+.venv/
+
+# Python ki auto-generated files
+__pycache__/
+*.pyc
+
+# Test tools ki cache
+.pytest_cache/
+
+# Editor ki settings
+.vscode/
+
+# Secrets (agar kabhi banayen)
+.env
+
+# Runtime data: students ki saved submissions
+submissions.json
