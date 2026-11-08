@@ -114,3 +114,7 @@ On every push and pull request to `main`, the GitHub Actions workflow in `.githu
 
 - `submissions.json` and `reports.json` are created automatically at runtime and are not stored in Git.
 - The virtual environment (`venv/`) is not uploaded. Anyone can recreate it with `pip install -r requirements.txt`.
+
+## Author
+
+Abdullah, COMSATS University Islamabad
