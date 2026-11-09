@@ -27,28 +27,19 @@ jobs:
         run: python -m pytest -v -k "test_1 or test_2 or test_3"
 
       - name: Run all automated tests
+        if: ${{ !cancelled() }}
         run: python -m pytest -v
 
-      - name: Start local report receiver
-        if: always()
-        run: |
-          nohup python receiver.py > receiver.log 2>&1 &
-          sleep 2
-          curl --fail http://127.0.0.1:5001/
-
-      - name: Send test report to receiver
-        if: always()
+      - name: Send test report to my laptop
+        if: ${{ !cancelled() }}
+        env:
+          RECEIVER_URL: ${{ secrets.RECEIVER_URL }}
+          REPORT_TOKEN: ${{ secrets.REPORT_TOKEN }}
         run: python send_report.py
 
-      - name: Show received reports
-        if: always()
-        run: cat reports.json
-
       - name: Upload report as artifact
-        if: always()
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: test-report
-          path: |
-            reports.json
-            receiver.log
+          path: pytest-results.json
