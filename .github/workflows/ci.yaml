@@ -2,7 +2,6 @@ name: CI Pipeline
 
 on:
   push:
-    branches: [main]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -24,7 +23,10 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run automated tests
+      - name: Run the three lab tests
+        run: python -m pytest -v -k "test_1 or test_2 or test_3"
+
+      - name: Run all automated tests
         run: python -m pytest -v
 
       - name: Start local report receiver
