@@ -17,3 +17,5 @@ __pycache__/
 
 # Runtime data: students ki saved submissions
 submissions.json
+
+pytest-results.json
