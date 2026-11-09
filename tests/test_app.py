@@ -60,8 +60,7 @@ def test_empty_form_shows_all_errors(client):
     response = client.post("/", data={})
     assert response.status_code == 200
     assert b"Student Name is required." in response.data
-    assert b"Registration Number is required." in response.data
-    assert b"Assignment Title is required." in response.data
+    assert b"Registration Number is mandatory." in response.data    assert b"Assignment Title is required." in response.data
     assert b"Submission URL is required." in response.data
     assert app_module.load_submissions() == []
 
