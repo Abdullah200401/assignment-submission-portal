@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment Submission Portal — Demo</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .badge-bar {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .badge-bar img { vertical-align: middle; }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto 25px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 10px 0 20px;
+        }
+
+        .hero h1 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            color: #7f8c8d;
+            font-size: 1.05em;
+        }
+
+        .demo-badge {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        .ci-badge {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin: 0 0 15px 0;
+            font-size: 1.3em;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #34495e;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 11px 14px;
+            margin-top: 6px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #2980b9;
+        }
+
+        button {
+            margin-top: 22px;
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #2980b9, #3498db);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(41, 128, 185, 0.4);
+        }
+
+        button:active { transform: translateY(0); }
+
+        .success-box {
+            background: #eafaf1;
+            border: 1px solid #27ae60;
+            color: #1e8449;
+            padding: 12px 18px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .table-wrapper { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+        }
+
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 11px 14px;
+            text-align: left;
+            word-break: break-word;
+        }
+
+        th {
+            background: linear-gradient(135deg, #2980b9, #3498db);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) { background: #f8f9fa; }
+        tr:hover { background: #ebf5fb; }
+
+        a { color: #2980b9; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .footer {
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9em;
+            margin-top: 20px;
+        }
+
+        .footer a { color: white; }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            padding: 18px;
+            border-radius: 10px;
+            border-left: 4px solid #2980b9;
+        }
+
+        .info-card h3 {
+            color: #2980b9;
+            margin-bottom: 6px;
+            font-size: 0.95em;
+        }
+
+        .info-card p {
+            color: #555;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 600px) {
+            .info-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 1.5em; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="badge-bar">
+        <a href="https://github.com/Abdullah200401/assignment-submission-portal/actions">
+            <img src="https://github.com/Abdullah200401/assignment-submission-portal/actions/workflows/ci.yaml/badge.svg"
+                 alt="CI Pipeline">
+        </a>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>📝 Assignment Submission Portal</h1>
+            <p>CSC418 — DevOps Lab Mid Project</p>
+            <span class="demo-badge">STATIC DEMO</span>
+            <span class="ci-badge">✅ CI/CD ENABLED</span>
+        </div>
+
+        <div class="success-box">
+            ✅ Assignment submitted successfully! <em>(sample data shown below)</em>
+        </div>
+
+        <form onsubmit="event.preventDefault(); alert('This is a static demo. The live portal runs on Flask.');">
+            <label for="student_name">Student Name</label>
+            <input type="text" id="student_name" placeholder="e.g. Ali Khan" value="Ali Khan">
+
+            <label for="reg_number">Registration Number</label>
+            <input type="text" id="reg_number" placeholder="e.g. FA22-BCS-001" value="FA22-BCS-001">
+
+            <label for="assignment_title">Assignment Title</label>
+            <input type="text" id="assignment_title" placeholder="e.g. Docker Basics" value="Docker Basics">
+
+            <label for="submission_url">Submission URL</label>
+            <input type="text" id="submission_url" placeholder="e.g. https://github.com/ali/docker"
+                   value="https://github.com/ali/docker">
+
+            <button type="submit">Submit Assignment</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <h2>📋 Saved Submissions (3)</h2>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Student Name</th>
+                        <th>Reg. Number</th>
+                        <th>Assignment Title</th>
+                        <th>Submission URL</th>
+                        <th>Submitted At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Ali Khan</td>
+                        <td>FA22-BCS-001</td>
+                        <td>Docker Basics</td>
+                        <td><a href="https://github.com/ali/docker" target="_blank">https://github.com/ali/docker</a></td>
+                        <td>2026-11-12 14:30:00</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Sara Ahmed</td>
+                        <td>FA22-BCS-042</td>
+                        <td>CI/CD Pipeline</td>
+                        <td><a href="https://github.com/sara/cicd" target="_blank">https://github.com/sara/cicd</a></td>
+                        <td>2026-11-12 13:15:22</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>Usman Raza</td>
+                        <td>FA22-BCS-078</td>
+                        <td>Kubernetes Deploy</td>
+                        <td><a href="https://github.com/usman/k8s" target="_blank">https://github.com/usman/k8s</a></td>
+                        <td>2026-11-12 11:45:09</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>🔧 Project Features</h2>
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>📝 Form Validation</h3>
+                <p>Server-side validation ensures all fields are filled and URLs start with http:// or https://.</p>
+            </div>
+            <div class="info-card">
+                <h3>🧪 21 Automated Tests</h3>
+                <p>Comprehensive pytest suite covering URL validation, form submission, error handling, and data persistence.</p>
+            </div>
+            <div class="info-card">
+                <h3>⚡ CI/CD Pipeline</h3>
+                <p>GitHub Actions runs tests on every push. Conditional deployment publishes this page only when all tests pass.</p>
+            </div>
+            <div class="info-card">
+                <h3>📧 Email Reports</h3>
+                <p>Automated email with test results, commit ID, pass/fail counts, and individual test details after every run.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>
+            Abdullah — COMSATS University Islamabad<br>
+            <a href="https://github.com/Abdullah200401/assignment-submission-portal">View on GitHub</a>
+        </p>
+    </div>
+</body>
+
+</html>

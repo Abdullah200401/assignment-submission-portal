@@ -6,7 +6,14 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# GitHub Pages deployment ke liye permissions
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
+  # ───────────────────────── JOB 1: TEST ─────────────────────────
   test:
     runs-on: ubuntu-latest
 
@@ -23,11 +30,8 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run the three lab tests
-        run: python -m pytest -v -k "test_1 or test_2 or test_3"
-
       - name: Run all automated tests
-        run: python -m pytest -v
+        run: python -m pytest -v --junitxml=test-results.xml
 
       - name: Start local report receiver
         if: always()
@@ -44,7 +48,7 @@ jobs:
         if: always()
         run: cat reports.json
 
-      - name: Upload report as artifact
+      - name: Upload test artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -52,3 +56,71 @@ jobs:
           path: |
             reports.json
             receiver.log
+            test-results.xml
+
+  # ──────────── JOB 2: DEPLOY TO GITHUB PAGES (BONUS) ────────────
+  deploy:
+    needs: test
+    # Sirf main branch pe deploy karo, aur sirf jab tests PASS hon
+    if: github.ref == 'refs/heads/main' && success()
+    runs-on: ubuntu-latest
+
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: static-site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # ──────────── JOB 3: EMAIL TEST REPORT (BONUS) ────────────
+  email-report:
+    needs: test
+    # Hamesha chalo — pass ho ya fail, email bhejo
+    if: always()
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Download test artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: test-report
+
+      - name: Generate email report
+        id: report
+        run: python generate_email_report.py test-results.xml
+
+      - name: Send email report
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "${{ steps.report.outputs.subject_emoji }} ${{ steps.report.outputs.status }} — CI Report (${{ steps.report.outputs.passed }}/${{ steps.report.outputs.total }} passed) @ ${{ github.sha }}"
+          to: ${{ secrets.EMAIL_TO }}
+          from: "CI Pipeline <${{ secrets.EMAIL_USERNAME }}>"
+          html_body: file://email-report.html
+          attachments: test-results.xml
+          convert_markdown: false

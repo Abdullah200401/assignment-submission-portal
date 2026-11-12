@@ -17,3 +17,9 @@ __pycache__/
 
 # Runtime data: students ki saved submissions
 submissions.json
+
+# Test output files (CI mein generate hoti hain)
+test-results.xml
+email-report.html
+reports.json
+pytest-results.json
