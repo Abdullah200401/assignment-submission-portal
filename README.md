@@ -118,3 +118,62 @@ On every push and pull request to `main`, the GitHub Actions workflow in `.githu
 ## Author
 
 Abdullah, COMSATS University Islamabad
+
+
+
+## How to Start the Local Report Receiver
+
+After every GitHub Actions run, the real test report is sent automatically to the receiver running on my own Windows computer and saved as `test-report.json`.
+
+```
+GitHub runner -> HTTPS POST + Bearer token -> ngrok tunnel -> receiver.py (127.0.0.1:5001) -> test-report.json
+```
+
+The runner's `localhost` is the GitHub machine, not my computer, so an ngrok tunnel connects the two.
+
+### One-time setup
+
+1. Create a free ngrok account, install ngrok (version 3.28 or newer), run `ngrok config add-authtoken <your-ngrok-token>` and claim the free static domain.
+2. Create a secret token. It is stored in the home folder, outside the repository:
+
+```
+python -c "import secrets; print(secrets.token_urlsafe(32))" | Set-Content "$HOME\report-token.txt"
+```
+
+3. In GitHub open Settings -> Secrets and variables -> Actions and create two repository secrets:
+   - `RECEIVER_URL`: `https://<your-domain>.ngrok-free.dev`
+   - `REPORT_TOKEN`: the token from `report-token.txt`
+
+### Every time (3 terminals)
+
+Terminal 1, the receiver:
+
+```
+$env:REPORT_TOKEN = (Get-Content "$HOME\report-token.txt" -Raw).Trim()
+python receiver.py
+```
+
+Terminal 2, the tunnel:
+
+```
+ngrok http --url=<your-domain>.ngrok-free.dev 5001
+```
+
+Terminal 3: push a commit. When the workflow finishes, `test-report.json` is created or updated automatically.
+
+### Report contents
+
+Repository, branch, commit SHA, run id, timestamp, every test name with `PASS` or `FAIL`, the failure message of failed tests, total, passed and failed counts and the overall status. Reports are sent for passing and failing runs. Requests without the correct `Authorization: Bearer <token>` header are rejected with HTTP 401.
+
+### Test it locally
+
+```
+$env:REPORT_TOKEN = (Get-Content "$HOME\report-token.txt" -Raw).Trim()
+$env:RECEIVER_URL = "http://127.0.0.1:5001"
+python -m pytest -q
+python send_report.py
+```
+
+## Continuous Integration
+
+On every push the workflow in `.github/workflows/ci.yaml` installs the dependencies and runs the tests (the pipeline fails if any test fails). It then sends the report to the receiver on my computer, even when tests failed.
