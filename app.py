@@ -15,8 +15,10 @@ DATA_FILE = os.path.join(BASE_DIR, "submissions.json")
 def is_valid_url(url):
     """URL sirf tab valid hai jab woh http ya https se shuru ho,
     domain maujood ho, aur beech mein space na ho."""
-    # DELIBERATE BUG: har URL ko valid maan lo (Demo 2 ke liye)
-    return True
+    if any(ch.isspace() for ch in url):
+        return False
+    parsed = urlparse(url)
+    return parsed.scheme in ("http", "https") and bool(parsed.netloc)
 
 
 def load_submissions():
