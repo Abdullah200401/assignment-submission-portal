@@ -1,0 +1,142 @@
+{
+    "repository_name": "assignment-submission-portal",
+    "branch": "demo/phase5",
+    "commit_sha": "local-test",
+    "pipeline_run_id": "local-manual-run",
+    "pipeline_run_number": "1",
+    "execution_timestamp": "2026-11-13 09:19:28",
+    "overall_status": "PASS",
+    "total": 21,
+    "passed": 21,
+    "failed": 0,
+    "skipped": 0,
+    "tests": [
+        {
+            "test_name": "tests.test_app::test_valid_urls_accepted[http://example.com]",
+            "result": "PASS",
+            "duration": "0.001s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_valid_urls_accepted[https://github.com/ali/docker]",
+            "result": "PASS",
+            "duration": "0.001s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_invalid_urls_rejected[google.com]",
+            "result": "PASS",
+            "duration": "0.001s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_invalid_urls_rejected[ftp://abc.com]",
+            "result": "PASS",
+            "duration": "0.001s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_invalid_urls_rejected[http://]",
+            "result": "PASS",
+            "duration": "0.001s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_invalid_urls_rejected[https://my site.com]",
+            "result": "PASS",
+            "duration": "0.001s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_invalid_urls_rejected[javascript:alert(1)]",
+            "result": "PASS",
+            "duration": "0.001s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_invalid_urls_rejected[]",
+            "result": "PASS",
+            "duration": "0.001s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_home_page_loads",
+            "result": "PASS",
+            "duration": "0.044s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_empty_form_shows_all_errors",
+            "result": "PASS",
+            "duration": "0.004s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_spaces_only_name_rejected",
+            "result": "PASS",
+            "duration": "0.004s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_url_without_scheme_rejected",
+            "result": "PASS",
+            "duration": "0.004s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_ftp_url_rejected",
+            "result": "PASS",
+            "duration": "0.004s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_valid_submission_is_saved_and_displayed",
+            "result": "PASS",
+            "duration": "0.018s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_valid_submission_redirects",
+            "result": "PASS",
+            "duration": "0.005s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_newest_submission_listed_first",
+            "result": "PASS",
+            "duration": "0.030s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_1_valid_submission_saved_and_listed",
+            "result": "PASS",
+            "duration": "0.008s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_2_missing_registration_number_rejected",
+            "result": "PASS",
+            "duration": "0.004s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_3_invalid_submission_url_rejected_and_not_saved[google.com]",
+            "result": "PASS",
+            "duration": "0.005s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_3_invalid_submission_url_rejected_and_not_saved[ftp://abc.com]",
+            "result": "PASS",
+            "duration": "0.005s",
+            "failure_message": null
+        },
+        {
+            "test_name": "tests.test_app::test_3_invalid_submission_url_rejected_and_not_saved[http://]",
+            "result": "PASS",
+            "duration": "0.004s",
+            "failure_message": null
+        }
+    ],
+    "received_at": "2026-11-13 09:19:51"
+}
