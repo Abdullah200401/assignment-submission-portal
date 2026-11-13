@@ -6,14 +6,13 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# GitHub Pages deployment ke liye permissions
 permissions:
   contents: read
   pages: write
   id-token: write
 
 jobs:
-  # ───────────────────────── JOB 1: TEST ─────────────────────────
+  # ───────────────────────── JOB 1: TEST & REPORT ─────────────────────────
   test:
     runs-on: ubuntu-latest
 
@@ -31,37 +30,52 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run all automated tests
+        id: run_tests
+        continue-on-error: true
         run: python -m pytest -v --junitxml=test-results.xml
 
-      - name: Start local report receiver
-        if: always()
+      - name: Start internal report receiver (Runner self-test)
         run: |
           nohup python receiver.py > receiver.log 2>&1 &
           sleep 2
-          curl --fail http://127.0.0.1:5001/
+          curl --fail http://127.0.0.1:5001/ || true
 
-      - name: Send test report to receiver
-        if: always()
-        run: python send_report.py
+      - name: Send test report to internal receiver
+        run: python send_report.py http://127.0.0.1:5001/report
 
-      - name: Show received reports
-        if: always()
-        run: cat reports.json
+      - name: Send test report to External/Local Receiver (via Tunnel / Webhook Secret if set)
+        if: env.EXTERNAL_RECEIVER_URL != ''
+        env:
+          EXTERNAL_RECEIVER_URL: ${{ secrets.LOCAL_RECEIVER_URL }}
+        run: |
+          python send_report.py "$EXTERNAL_RECEIVER_URL" || true
+
+      - name: Display testreport.json in CI logs
+        run: |
+          if [ -f testreport.json ]; then
+            cat testreport.json
+          fi
 
       - name: Upload test artifacts
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-report
           path: |
+            testreport.json
+            test-report.json
             reports.json
             receiver.log
             test-results.xml
 
+      - name: Fail step if tests actually failed
+        if: steps.run_tests.outcome == 'failure'
+        run: |
+          echo "Automated tests failed. Propagating failure status."
+          exit 1
+
   # ──────────── JOB 2: DEPLOY TO GITHUB PAGES (BONUS) ────────────
   deploy:
     needs: test
-    # Sirf main branch pe deploy karo, aur sirf jab tests PASS hon
     if: github.ref == 'refs/heads/main' && success()
     runs-on: ubuntu-latest
 
@@ -89,7 +103,6 @@ jobs:
   # ──────────── JOB 3: EMAIL TEST REPORT (BONUS) ────────────
   email-report:
     needs: test
-    # Hamesha chalo — pass ho ya fail, email bhejo
     if: always()
     runs-on: ubuntu-latest
 
@@ -112,6 +125,7 @@ jobs:
         run: python generate_email_report.py test-results.xml
 
       - name: Send email report
+        continue-on-error: true
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: smtp.gmail.com
